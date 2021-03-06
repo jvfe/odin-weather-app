@@ -4,8 +4,6 @@ function getUnitSymbol(value) {
     ["imperial", "ºF"]
   ]);
 
-  console.log(unitMap.get(value), value);
-
   return unitMap.get(value);
 }
 

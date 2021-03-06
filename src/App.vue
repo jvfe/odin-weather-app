@@ -47,6 +47,12 @@
         </v-row>
       </v-container>
       <v-divider></v-divider>
+      <v-row v-if="loading" class="justify-center" no-gutters>
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </v-row>
       <v-row class="justify-center" v-if="currentQuery" no-gutters>
         <v-col cols="12" lg="4">
           <Weather :weatherResult="currentQuery" :unit="unit"></Weather>
@@ -77,15 +83,18 @@ export default {
       },
       unit: "",
       location: "",
-      currentQuery: ""
+      currentQuery: "",
+      loading: false
     };
   },
 
   methods: {
     getWeatherInfo: async function() {
+      this.loading = true;
       const response = await getWeather(this.location, this.unit);
       this.currentQuery = response;
       this.$refs.form.reset();
+      this.loading = false;
       return response;
     }
   }
