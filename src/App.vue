@@ -29,7 +29,7 @@
               </v-row>
               <v-row class="align-center">
                 <v-text-field
-                  v-model="location"
+                  v-model.trim="location"
                   :rules="[rules.required]"
                   label="Enter a location"
                   id="searchbar"
