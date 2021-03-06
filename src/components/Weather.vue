@@ -5,9 +5,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-row class="align-center">
-              <v-icon class="ma-3 mr-1" large>{{
-                weatherSymbols.get(weatherResult.main)
-              }}</v-icon>
+              <v-icon class="ma-3 mr-1" large>{{ weatherIcon }}</v-icon>
               <h4 class="description">{{ weatherResult.description }}</h4>
             </v-row>
             <h1>{{ weatherResult.place }}</h1>
@@ -37,29 +35,19 @@
 </template>
 
 <script>
+import { getUnitSymbol, getWeatherIcon } from "../lib/utils";
+
 export default {
   name: "Weather",
   props: ["weatherResult", "unit"],
   data() {
     return {
-      unitMap: new Map([
-        ["metric", "ºC"],
-        ["imperial", "ºF"]
-      ]),
-      weatherSymbols: new Map([
-        ["Clouds", "mdi-weather-cloudy"],
-        ["Clear", "mdi-weather-sunny"],
-        ["Atmosphere", "mdi-weather-fog"],
-        ["Snow", "mdi-weather-snowy-heavy"],
-        ["Rain", "mdi-weather-pouring"],
-        ["Drizzle", "mdi-weather-rainy"],
-        ["Thunderstorm", "mdi-weather-lightning-rainy"]
-      ])
+      weatherIcon: getWeatherIcon(this.weatherResult.main)
     };
   },
   computed: {
     unitSymbol() {
-      return this.unitMap.get(this.unit);
+      return getUnitSymbol(this.unit);
     }
   }
 };

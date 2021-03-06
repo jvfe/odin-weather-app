@@ -1,25 +1,34 @@
-async function getWeather(location, unit) {
-  const baseUrl = "https://api.openweathermap.org/data/2.5/weather?q=";
-  const requestUrl = `${baseUrl}${location}&APPID=${process.env.VUE_APP_API_KEY}&units=${unit}`;
+function getWeatherInfo(obj) {
+  return {
+    place: `${obj.name}, ${obj.sys.country}`,
+    main: obj.weather[0].main,
+    description: obj.weather[0].description,
+    temp: obj.main.temp,
+    feels_like: obj.main.feels_like,
+    temp_min: obj.main.temp_min,
+    temp_max: obj.main.temp_max,
+    humidity: obj.main.humidity,
+    pressure: obj.main.pressure
+  };
+}
 
+async function queryAPI(url) {
   try {
-    const request = await fetch(requestUrl, { mode: "cors" });
+    const request = await fetch(url, { mode: "cors" });
     const result = await request.json();
-    const weatherResult = {
-      place: `${result.name}, ${result.sys.country}`,
-      main: result.weather[0].main,
-      description: result.weather[0].description,
-      temp: result.main.temp,
-      feels_like: result.main.feels_like,
-      temp_min: result.main.temp_min,
-      temp_max: result.main.temp_max,
-      humidity: result.main.humidity,
-      pressure: result.main.pressure
-    };
-    return weatherResult;
+    return result;
   } catch (error) {
     console.log(error);
   }
+}
+
+async function getWeather(location, unit) {
+  const baseUrl = "https://api.openweathermap.org/data/2.5/weather?q=";
+  const requestUrl = `${baseUrl}${location}&APPID=${process.env.VUE_APP_API_KEY}&units=${unit}`;
+  const result = await queryAPI(requestUrl);
+  const weatherResult = getWeatherInfo(result);
+
+  return weatherResult;
 }
 
 export default getWeather;
