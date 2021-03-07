@@ -53,7 +53,7 @@
           color="primary"
         ></v-progress-circular>
       </v-row>
-      <v-row class="justify-center" v-if="weather" no-gutters>
+      <v-row class="justify-center" v-if="weather && forecasts" no-gutters>
         <v-col cols="12" lg="4">
           <Weather :weatherResult="weather" :unit="unit"></Weather>
         </v-col>

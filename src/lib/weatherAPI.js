@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns";
+import { format, parseISO, isSameDay } from "date-fns";
 
 function getWeatherInfo(obj) {
   return {
@@ -11,7 +11,8 @@ function getWeatherInfo(obj) {
     temp_max: obj.main.temp_max,
     humidity: obj.main.humidity,
     pressure: obj.main.pressure,
-    date: obj.dt_txt ? format(parseISO(obj.dt_txt), "iii, MMM dd") : null
+    date: obj.dt_txt ? parseISO(obj.dt_txt) : null,
+    date_str: obj.dt_txt ? format(parseISO(obj.dt_txt), "iii, MMM dd") : null
   };
 }
 
@@ -42,7 +43,13 @@ async function getForecasts(location, unit) {
     return getWeatherInfo(day);
   });
 
-  return forecastResult.slice(0, 8);
+  const differentDatesForecasts = forecastResult.filter((forecast, index) => {
+    if (index >= 1) {
+      return isSameDay(forecast.date, forecastResult[index - 1].date) === false;
+    }
+  });
+
+  return differentDatesForecasts;
 }
 
 export { getWeather, getForecasts };
