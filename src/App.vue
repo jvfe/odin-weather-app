@@ -20,13 +20,13 @@
                 {{ weather.place ? weather.place : "your city" }}?
               </h1>
             </v-row>
+            <v-row class="justify-center">
+              <v-radio-group mandatory row v-model="unit">
+                <v-radio label="Cº" value="metric"></v-radio>
+                <v-radio label="Fº" value="imperial"></v-radio>
+              </v-radio-group>
+            </v-row>
             <v-form ref="form" @submit.prevent="queryAPI" class="pa-3">
-              <v-row class="justify-center">
-                <v-radio-group row mandatory v-model="unit">
-                  <v-radio label="Cº" value="metric"></v-radio>
-                  <v-radio label="Fº" value="imperial"></v-radio>
-                </v-radio-group>
-              </v-row>
               <v-row class="align-center">
                 <v-text-field
                   v-model.trim="location"
