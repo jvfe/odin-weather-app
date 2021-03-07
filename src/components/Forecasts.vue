@@ -2,7 +2,7 @@
   <v-container>
     <v-sheet class="pa-3" elevation="10" rounded>
       <v-container>
-        <h1>Hi!</h1>
+        <h2>Forecasts for the next week</h2>
       </v-container>
     </v-sheet>
   </v-container>
@@ -10,6 +10,7 @@
 
 <script>
 export default {
-  name: "Forecasts"
+  name: "Forecasts",
+  props: ["forecastsResult", "unit"]
 };
 </script>

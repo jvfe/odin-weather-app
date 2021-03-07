@@ -17,10 +17,10 @@
             <v-row class="justify-center pa-1">
               <h1>
                 How's the weather in
-                {{ currentQuery.place ? currentQuery.place : "your city" }}?
+                {{ weather.place ? weather.place : "your city" }}?
               </h1>
             </v-row>
-            <v-form ref="form" @submit.prevent="getWeatherInfo" class="pa-3">
+            <v-form ref="form" @submit.prevent="queryAPI" class="pa-3">
               <v-row class="justify-center">
                 <v-radio-group row mandatory v-model="unit">
                   <v-radio label="Cº" value="metric"></v-radio>
@@ -53,12 +53,12 @@
           color="primary"
         ></v-progress-circular>
       </v-row>
-      <v-row class="justify-center" v-if="currentQuery" no-gutters>
+      <v-row class="justify-center" v-if="weather" no-gutters>
         <v-col cols="12" lg="4">
-          <Weather :weatherResult="currentQuery" :unit="unit"></Weather>
+          <Weather :weatherResult="weather" :unit="unit"></Weather>
         </v-col>
         <v-col cols="12" lg="4">
-          <Forecasts></Forecasts>
+          <Forecasts :forecastsResult="forecasts" :unit="unit"></Forecasts>
         </v-col>
       </v-row>
     </v-main>
@@ -69,7 +69,7 @@
 import Weather from "./components/Weather";
 import Forecasts from "./components/Forecasts";
 
-import getWeather from "./lib/weatherAPI";
+import { getWeather, getForecasts } from "./lib/weatherAPI";
 
 export default {
   name: "App",
@@ -83,19 +83,27 @@ export default {
       },
       unit: "",
       location: "",
-      currentQuery: "",
+      weather: "",
+      forecasts: "",
       loading: false
     };
   },
 
   methods: {
-    getWeatherInfo: async function() {
+    queryAPI: async function() {
       this.loading = true;
-      const response = await getWeather(this.location, this.unit);
-      this.currentQuery = response;
+
+      this.getWeatherInfo();
+      this.getForecastInfo();
+
       this.$refs.form.reset();
       this.loading = false;
-      return response;
+    },
+    getWeatherInfo: async function() {
+      this.weather = await getWeather(this.location, this.unit);
+    },
+    getForecastInfo: async function() {
+      this.forecasts = await getForecasts(this.location, this.unit);
     }
   }
 };
