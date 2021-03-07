@@ -53,6 +53,13 @@
           color="primary"
         ></v-progress-circular>
       </v-row>
+      <v-row class="justify-center ma-1" v-if="error">
+        <v-col cols="12" md="4">
+          <v-alert color="red" outlined type="error"
+            >Sorry, I couldn't find your location 😥</v-alert
+          >
+        </v-col>
+      </v-row>
       <v-row class="justify-center" v-if="weather && forecasts" no-gutters>
         <v-col cols="12" lg="4">
           <Weather :weatherResult="weather" :unit="unit"></Weather>
@@ -85,25 +92,32 @@ export default {
       location: "",
       weather: "",
       forecasts: "",
-      loading: false
+      loading: false,
+      error: false
     };
   },
 
   methods: {
     queryAPI: async function() {
       this.loading = true;
-
-      this.getWeatherInfo();
-      this.getForecastInfo();
-
-      this.$refs.form.reset();
-      this.loading = false;
+      try {
+        this.error = false;
+        this.weather = await this.getWeatherInfo();
+        this.forecasts = await this.getForecastInfo();
+      } catch (error) {
+        this.error = true;
+      } finally {
+        this.$refs.form.reset();
+        this.loading = false;
+      }
     },
     getWeatherInfo: async function() {
-      this.weather = await getWeather(this.location, this.unit);
+      const response = await getWeather(this.location, this.unit);
+      return response;
     },
     getForecastInfo: async function() {
-      this.forecasts = await getForecasts(this.location, this.unit);
+      const response = await getForecasts(this.location, this.unit);
+      return response;
     }
   }
 };

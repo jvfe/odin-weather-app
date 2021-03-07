@@ -20,9 +20,12 @@ async function queryAPI(url) {
   try {
     const request = await fetch(url, { mode: "cors" });
     const result = await request.json();
+    if (result.cod != 200) {
+      throw Error("Couldn't find location");
+    }
     return result;
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 }
 

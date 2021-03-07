@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-sheet class="pa-2" elevation="10" rounded>
+    <v-sheet class="pa-2 deep-purple darken-4" elevation="10" rounded>
       <v-container>
         <v-row>
           <v-col cols="12" md="6">

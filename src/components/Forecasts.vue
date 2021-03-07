@@ -1,17 +1,24 @@
 <template>
   <v-container>
-    <v-sheet class="pa-3" elevation="10" rounded>
+    <v-sheet class="pa-3 blue-grey darken-4" elevation="10" rounded>
       <v-container>
-        <h2>Forecasts for the next week</h2>
+        <v-col>
+          <h2>Forecasts for the next week</h2>
+          <v-divider></v-divider>
+        </v-col>
         <v-expansion-panels>
-          <v-expansion-panel v-for="(forecast, i) of forecastsResult" :key="i">
+          <v-expansion-panel
+            class="purple darken-4"
+            v-for="(forecast, i) of forecastsResult"
+            :key="i"
+          >
             <v-expansion-panel-header>
               <v-row>
                 <v-col>
-                  {{ forecast.date_str }}
+                  <h4>{{ forecast.date_str }}</h4>
                 </v-col>
                 <v-col>
-                  <v-icon>
+                  <v-icon large>
                     {{ getIcon(forecast.main) }}
                   </v-icon>
 
@@ -59,10 +66,10 @@ import { getUnitSymbol, getWeatherIcon } from "../lib/utils";
 export default {
   name: "Forecasts",
   props: ["forecastsResult", "unit"],
-  data() {
-    return {
-      unitSymbol: getUnitSymbol(this.unit)
-    };
+  computed: {
+    unitSymbol() {
+      return getUnitSymbol(this.unit);
+    }
   },
   methods: {
     getIcon: function(value) {
